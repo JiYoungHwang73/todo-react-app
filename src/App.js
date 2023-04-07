@@ -4,6 +4,8 @@ import AddTodo from './AddTodo'
 import {Paper, List, Container, Grid, Button, AppBar, Toolbar, Typography} from "@material-ui/core";
 import './App.css';
 import { call, signout } from './service/ApiService';
+import DeleteDoneAll from './DeleteDoneAll';
+import Clear from './Clear';
 
 class App extends React.Component {
   constructor(props) {
@@ -25,6 +27,31 @@ class App extends React.Component {
     call("/todo","DELETE",item).then((response) =>
       this.setState({items:response.data})
     );
+  }
+
+  // 체크체크 지우기
+  clearAllDonelist = () => {
+    const thisItems = this.state.items;
+    console.log(this.state.items);
+    console.log(this.state.items.done);
+    thisItems.map((tdl) => {
+      if (tdl.done === true) {
+        call("/todo", "DELETE", tdl ).then((response) =>
+        this.setState({ items: response.data })
+        );
+      }
+    });
+  }
+
+  // 목록 비우기
+  clearAll = () => {
+    const thisItems = this.state.items;
+    console.log(this.state.items);
+    thisItems.map((tdl) => {    
+      call("/todo", "DELETE", tdl ).then((response) =>
+      this.setState({ items: response.data })
+      );
+    });
   }
 
   update = (item) => {
@@ -69,6 +96,14 @@ class App extends React.Component {
       </AppBar>
     )
 
+    // var cleardone = () => {
+    //   return (
+    //     <div className="clearAlldonelist">
+    //     </div>
+    //   )
+    // }
+    // -> 따로 js 파일로 만드는 게 나을 듯
+
     // loading 중이 아닐 때
     var todoListPage = (
       <div>
@@ -77,6 +112,8 @@ class App extends React.Component {
           <AddTodo add={this.add} />
           <div className="TodoList">{todoItems}</div>
         </Container>
+        <DeleteDoneAll clearAllDonelist={this.clearAllDonelist} />
+        <Clear clearAll={this.clearAll} />
       </div>
     );
 
