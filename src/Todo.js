@@ -29,20 +29,21 @@ class Todo extends React.Component {
         thisItem.title = e.target.value;
         this.setState({item:thisItem});
     }
-    checkboxEventHander = (e) => {
+    checkboxEventHandler = (e) => {
         const thisItem = this.state.item;
         thisItem.done = thisItem.done ? false : true; // thisItemdone = !thisitem.done
         //this.setState({item:thisItem});
         this.setState({readOnly:true});
         this.update(this.state.item);
     }
+
     render() {
         const item = this.state.item;
         return (
             <ListItem>
                 <Checkbox 
                 checked={item.done} 
-                onChange={this.checkboxEventHander}
+                onChange={this.checkboxEventHandler}
                 />
                 <ListItemText>
                     <InputBase
